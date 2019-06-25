@@ -1,0 +1,145 @@
+<html>
+    <head>
+        <title>Flask Ajax</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <html>
+    <body>
+        <div id="data" class="message"></div>       
+        <form method="post">	
+		<br><br><label>CodePK........: </label><input type="text" name="codepk" id = "codepk"><br>
+		<p><label>CodeID.........: </label><input type="text" name="codeid" id = "codeid"><br>
+		<p><label>FullName......: </label><input type="text" name="fullname" id = "fullname"><br>
+		<p><label>IDCard..........: </label><input type="text" name="idcard" id="idcard"><p>
+		<p><label>Birthday........: </label><input type="text" name="birthday" id="birthday"><p>
+		<p><label>Banid............: </label><input type="text" name="banid" id="banid"><p>
+		<p><label>Moo..............: </label><input type="text" name="moo" id="moo"><p>
+		<p><label>Tambon.........: </label><input type="text" name="tambon" id="tambon"><p>
+		<p><label>Amphuer.......: </label><input type="text" name="amphuer" id="amphuer"><p>
+		<p><label>Province........: </label><input type="text" name="province" id="province"><p>
+		<p><label>Service..........: </label><input type="text" name="service" id="service"><p>
+
+		<input type="submit" value="Submit"">
+		</form>
+
+		<button id="btnSmartcard">Smartcard Reader</button>
+		<button id="retrieveDataButton">Retrieve all data</button>
+
+		<div id="Scores">
+		<ul id="scoresList">
+		</ul>
+		</div>
+				
+        <script>
+            function getVals(){
+                  a = ["ab", "cd"];
+                  return a;
+            }
+            $(document).ready(function () {
+                $("#btnSmartcard").on("click", function() { 
+                    var js_data = JSON.stringify(getVals());
+                    $.ajax({                        
+                        url: '/', 
+                        type : 'post',
+                        contentType: 'application/json',
+                        dataType : 'json',
+                        data : js_data
+                    }).done(function(result) {
+                        console.log(result); 
+                        //$("#data").html(result);
+						//======new======================						
+						document.querySelector('#codepk').value =result.split("#")[0]; 
+						document.querySelector('#codeid').value =result.split("#")[1];
+						document.querySelector('#fullname').value =result.split("#")[2];
+						document.querySelector('#idcard').value =result.split("#")[3];
+						document.querySelector('#birthday').value =result.split("#")[4];
+						document.querySelector('#banid').value =result.split("#")[5];
+						document.querySelector('#moo').value =result.split("#")[6];
+						document.querySelector('#tambon').value =result.split("#")[7];
+						document.querySelector('#amphuer').value =result.split("#")[8];
+						document.querySelector('#province').value =result.split("#")[9];
+						//===============================
+                    }).fail(function(jqXHR, textStatus, errorThrown) {
+                        console.log("fail: ",textStatus, errorThrown);
+                    });
+                });
+            });
+			
+			$(document).ready(function() {
+				$(document).on('submit', 'form', function() {
+					// Here you get the values:
+					var codepk = $('#codepk').val();
+					var codeid = $('#codeid').val();
+					var fullname = $('#fullname').val();
+					var idcard = $('#idcard').val();
+					var birthday = $('#birthday').val();
+					var banid = $('#banid').val();
+					var moo = $('#moo').val();
+					var tambon = $('#tambon').val();
+					var amphuer = $('#amphuer').val();
+					var province = $('#province').val();
+					var service = $('#service').val();
+
+					// OR
+					// you have a simpler option:
+					// var data = this.serialize();
+					$.ajax({
+						type: 'POST',
+						data: {
+							codepk: codepk,
+							codeid: codeid,
+							fullname: fullname,
+							idcard: idcard,
+							birthday: birthday,
+							banid: banid,
+							moo: moo,
+							tambon: tambon,
+							amphuer: amphuer,
+							province: province,
+							service: service
+						},
+						// OR
+						// data: data, // if you use the form serialization above
+						url: "/add",
+						success: added,
+						error: showError
+					});
+				});
+			});
+
+			$("#retrieveDataButton").click(function() {
+				console.log(id);
+				$.ajax({
+					type: 'GET',
+					dataType: "json",
+					url: "/allShows",
+					data : res,
+					success: showScores,
+					error: showError
+				});
+			});
+
+			function showScores(responseData) {
+				$.each(responseData.matches, function (scores) {
+						$("#scoresList").append("<li type='square'>" +
+							"CodePK: " + scores.codepk +
+							"CodeID: " + scores.codeid +
+							"FullName: " + scores.fullname +
+							"IDCard: " + scores.idcard +
+							"Birthday: " + scores.birthday
+						);
+						$("#scoresList").append("</li>");
+					}
+				);
+			}
+
+			function added() {
+				alert("Success Add Database");
+			}
+
+			function showError() {
+				alert("Error Database");
+			}
+			
+        </script>       
+    </body>
+</html>

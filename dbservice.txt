@@ -1,0 +1,27 @@
+dbservice
+=========================================
+CREATE SCHEMA postgres
+  AUTHORIZATION postgres;
+
+GRANT ALL ON SCHEMA postgres TO postgres;
+=========================================
+CREATE TABLE tblservice
+(
+  codepk integer NOT NULL,
+  codeid character varying(7),
+  fullname character varying(60),
+  idcard character varying(13),
+  birthday character varying(10),
+  banid character varying(20),
+  moo character varying(2),
+  tambon character varying(30),
+  amphuer character varying(30),
+  province character varying(30),
+  service character varying(60),
+  CONSTRAINT tblservice_pkey PRIMARY KEY (codepk)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE tblservice
+  OWNER TO postgres;

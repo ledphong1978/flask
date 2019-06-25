@@ -1,0 +1,33 @@
+<html>
+    <head>
+        <title>Flask Ajax</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <div id="data"></div>       
+        <button id="demo_btn">Show All Data</button>
+        <script>
+            function getVals(){
+                  a = ["ab", "cd"];
+                  return a;
+            }
+            $(document).ready(function () {
+                $("#demo_btn").on("click", function() {
+                    var js_data = JSON.stringify(getVals());
+                    $.ajax({                        
+                        url: '/allShows',
+                        type : 'post',
+                        contentType: 'application/json',
+                        dataType : 'json',
+                        data : js_data
+                    }).done(function(result) {
+                        console.log(result);
+                        $("#data").html(result);
+                    }).fail(function(jqXHR, textStatus, errorThrown) {
+                        console.log("fail: ",textStatus, errorThrown);
+                    });
+                });
+            });
+        </script>       
+    </body>
+</html>
